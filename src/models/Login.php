@@ -1,6 +1,6 @@
 <?php
 
-class User extends Model {
+class Login extends Model {
     protected static $tableName = 'users';
     protected static $columns = [
         'id',
