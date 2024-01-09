@@ -1,14 +1,15 @@
 <?php
+loadModel('User');
 
 class Login extends Model {
-    protected static $tableName = 'users';
-    protected static $columns = [
-        'id',
-        'name',
-        'password',
-        'email',
-        'start_date',
-        'end_date',
-        'is_admin',      
-    ];
+    
+    public function checkLogin(){
+        $user = User::getOne(['email' => $this->email]);
+        if($user){
+            if(password_verify($this->password,$user->password)){
+                return $user;
+            }
+        }
+        throw new Exception();
+    }    
 }
