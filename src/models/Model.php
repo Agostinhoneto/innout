@@ -27,65 +27,63 @@ class Model
         $this->values[$key] = $value;
     }
 
-    public static function getOne($filters = [],$columns = '*'){
+
+    
+    public static function getOne($filters = [], $columns = '*') {
         $class = get_called_class();
-        $result = static::getResultSetFromSelect($filters,$columns);
-        return $result ? new $class($result->fetch_assoc()) : null ;
+        $result = static::getResultSetFromSelect($filters, $columns);
+        return $result ? new $class($result->fetch_assoc()) : null;
     }
 
-    public static function get($filters = [], $columns = '*'){
+    public static function get($filters = [], $columns = '*') {
         $objects = [];
-        $result = static::getResultSetFromSelect($filters, $columns = '*');
-        if($result){
+        $result = static::getResultSetFromSelect($filters, $columns);
+        if($result) {
             $class = get_called_class();
-            while($row = $result->fetch_assoc()){
+            while($row = $result->fetch_assoc()) {
                 array_push($objects, new $class($row));
             }
         }
-
         return $objects;
     }
 
-    public static function getResultSetFromSelect($filters = [], $columns = '*'){
+    public static function getResultSetFromSelect($filters = [], $columns = '*') {
         $sql = "SELECT ${columns} FROM "
-        . static::$tableName
-        . static::getFilters($filters);
+            . static::$tableName
+            . static::getFilters($filters);
         $result = Database::getResultFromQuery($sql);
-        if($result->num_rows === 0)
-        {
+        if($result->num_rows === 0) {
             return null;
-        }else{
+        } else {
             return $result;
         }
     }
-
-    public static function getFilters($filters = []){
+    private static function getFilters($filters) {
         $sql = '';
-        if(count($filters) > 0){
-            $sql .= "WHERE 1 = 1";
-            foreach($filters as $column => $value){
-                $sql .= " AND ${column} = " . static::getFormatedValue(($value));
+        if(count($filters) > 0) {
+            $sql .= " WHERE 1 = 1";
+            foreach($filters as $column => $value) {
+                if($column == 'raw') {
+                    $sql .= " AND {$value}";
+                } else {
+                    $sql .= " AND ${column} = " . static::getFormatedValue($value);
+                }
             }
-        }else{
-            return $filters;
-        }
+        } 
+        return $sql;
     }
 
-    private static function getFormatedValue($value){
-        if(is_null($value)){
+    private static function getFormatedValue($value) {
+        if(is_null($value)) {
             return "null";
-        }elseif(gettype($value) === 'string'){
+        } elseif(gettype($value) === 'string') {
             return "'${value}'";
-        }else{
+        } else {
             return $value;
         }
     }
 
-    public static function  getResultSetFromQuery($sql){
-
-    }
-
-    public static function getSelect($filters = [],$columns = '*'){
+    public static function getResultFromQuery($filters = [],$columns = '*'){
         $sql = "SELECT ${columns} FROM "
         . static::$tableName;
         return $sql;

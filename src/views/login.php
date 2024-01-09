@@ -22,9 +22,10 @@
                 <i class="icofont-runner-alt-1 ml-2"></i>
             </div>
             <div class="card-body">
+                <?php include(TEMPLATE_PATH . '/messages.php') ?>
                 <div class="form-group">
                     <label for>E-mail</label>
-                    <input type="email" id="email" class="form-control" placeholder="Informe o e-mail" autofocus>
+                    <input type="email" id="email" class="form-control" value="<?= $email ?>" placeholder="Informe o e-mail" autofocus>
                 </div>
                 <div class="form-group">
                     <label for>Senha</label>
@@ -37,5 +38,4 @@
         </div>
     </form>
 </body>
-
 </html>
