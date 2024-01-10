@@ -1,8 +1,7 @@
 <?php
 
 class Model
-{
-    
+{ 
     protected static $tableName = 'users';
     protected static $columns = [];
     protected $values = [];
