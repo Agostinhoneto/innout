@@ -16,7 +16,7 @@ class Login extends Model {
             throw new ValidationException($errors);
         }
     }
-    
+
     public function checkLogin() {
         $this->validate();
         $user = User::getOne(['email' => $this->email]);
